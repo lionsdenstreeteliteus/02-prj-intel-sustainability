@@ -1,153 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Intel: Sustainability Through the Ages</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+/* ========== Theme ========== */
+:root{
+  --intel-blue:#0057b7;
+  --intel-blue-2:#0071c5;
+  --bg:#f4f8fb; --fg:#222; --card:#fff;
+  --shadow:0 2px 8px rgba(0,87,183,.08);
+  --shadow-lg:0 10px 30px rgba(0,87,183,.22);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{font-family:Arial, sans-serif;margin:0;background:var(--bg);color:var(--fg)}
 
-  <!-- Header / Hero Section -->
-  <header>
-    <div>
-      <!-- Ask Copilot to teach you about `.svg`. 🙂 You'll need to resize the logo with CSS. -->
-      <img src="img/intel-header-logo.svg" alt="Intel Logo" />
-      <!-- Main Heading -->
-      <h1>
-        Sustainability Through the Ages
-      </h1>
+/* Header (unchanged) */
+header{background:var(--intel-blue);color:#fff;text-align:center;padding:2rem 1rem 1rem}
+header img{width:120px;margin-bottom:1rem}
+h1{margin:.5rem 0} header p{font-size:1.1rem;margin-top:.5rem}
 
-      <!-- Subheading / Description -->
-      <p>
-        Explore Intel's journey through time, discovering how our commitment
-        to innovation has shaped a more sustainable future for technology 
-        and our planet.
-      </p>
-    </div>
-  </header>
+/* Timeline container — works with <section> or <section class="timeline"> */
+section, .timeline{
+  max-width:1100px; margin:2rem auto; padding:0 1rem 1rem;
+  display:flex; flex-direction:column; gap:1rem; /* mobile-first: vertical stack */
+}
+section > h2, .timeline > h2{
+  text-align:center; color:var(--intel-blue); margin:0 0 1rem; font-size:1.5rem;
+}
 
-  <!-- Timeline Cards Section -->
-  <section>
+/* Card base */
+.timeline > .card, section > div{
+  background:var(--card); border-radius:12px; box-shadow:var(--shadow);
+  padding:1.25rem; position:relative; cursor:pointer; outline:none;
+  transition:transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s, background .35s, filter .35s;
+  transform:translateY(0) scale(1);
+  will-change:transform, box-shadow, background, filter;
+}
 
-    <!-- Card 1: 1968 -->
-    <div>
-      <h2>1968</h2>
-      <h3>Intel Founded</h3>
-      <!-- Image placeholder -->
-      <img src="img/1.jpg" alt="1968 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Robert Noyce and Gordon Moore rename the newly formed company 
-        NM Electronics to Intel Corporation, laying the foundation for 
-        decades of technological innovation.
-      </p>
-    </div>
+/* Hover/focus transforms (CSS Transforms + polish) */
+.timeline > .card:hover, section > div:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:var(--shadow-lg);
+  background:#e6f0fa;
+  filter:saturate(1.02);
+}
+.timeline > .card:focus-visible,
+.timeline > .card:focus-within,
+section > div:focus-visible,
+section > div:focus-within{
+  box-shadow:0 0 0 3px rgba(0,113,197,.35), var(--shadow-lg);
+}
 
-    <!-- Card 2: 1971 -->
-    <div>
-      <h2>1971</h2>
-      <h3>First Microprocessor</h3>
-      <!-- Image placeholder -->
-      <img src="img/2.jpg" alt="1971 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Intel debuts the 4004, the world's first commercial microprocessor, 
-        igniting the microprocessor revolution and propelling the future 
-        of computing devices.
-      </p>
-    </div>
+/* Card typography & images */
+section h2, section h3, .timeline h2, .timeline h3{margin-top:0}
+section h3, .timeline h3{color:var(--intel-blue-2);font-size:1.1rem}
+section p, .timeline p{font-size:1rem;margin:.5rem 0 0}
+section img, .timeline img{
+  display:block; margin:.5rem auto; width:100%; max-width:260px;
+  border-radius:8px; aspect-ratio:4/3; object-fit:cover;
+}
 
-    <!-- Card 3: 1978 -->
-    <div>
-      <h2>1978</h2>
-      <h3>8086 Processor</h3>
-      <!-- Image placeholder -->
-      <img src="img/3.jpg" alt="1978 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Launch of the 8086 processor, establishing the x86 architecture 
-        that drives countless PCs and servers in the modern era.
-      </p>
-    </div>
+/* Reveal-on-hover section inside each card */
+.timeline .extra, section > div .extra{
+  max-height:0; opacity:0; overflow:hidden; transform:translateY(6px);
+  transition:max-height .35s ease, opacity .25s ease, transform .25s ease;
+}
+.timeline > .card:hover .extra,
+.timeline > .card:focus-within .extra,
+section > div:hover .extra,
+section > div:focus-within .extra{
+  max-height:240px; opacity:1; transform:none;
+}
 
-    <!-- Card 4: 1985 -->
-    <div>
-      <h2>1985</h2>
-      <h3>386 Processor</h3>
-      <!-- Image placeholder -->
-      <img src="img/4.jpg" alt="1985 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Intel introduces the 386 processor with 32-bit architecture, 
-        ushering in a new era of performance and multitasking for 
-        personal computers.
-      </p>
-    </div>
+/* Horizontal scroll + scroll-snap on large screens (Scroll Snap Effect) */
+@media (min-width:768px){
+  section, .timeline{
+    flex-direction:row; align-items:stretch; gap:1rem;
+    overflow-x:auto; overflow-y:visible;
+    scroll-snap-type:x mandatory; scroll-padding-inline:1rem;
+    -webkit-overflow-scrolling:touch;
+  }
+  /* Keep heading as a full-width lead item if present */
+  section > h2, .timeline > h2{flex:0 0 100%; margin:1rem 0 .5rem}
+  .timeline > .card, section > div{
+    flex:0 0 clamp(280px, 30vw, 360px);
+    scroll-snap-align:center; scroll-snap-stop:always;
+  }
+  /* Pretty scrollbar */
+  section::-webkit-scrollbar, .timeline::-webkit-scrollbar{height:10px}
+  section::-webkit-scrollbar-track, .timeline::-webkit-scrollbar-track{background:#e9f1fb;border-radius:999px}
+  section::-webkit-scrollbar-thumb, .timeline::-webkit-scrollbar-thumb{
+    background:linear-gradient(90deg, var(--intel-blue), var(--intel-blue-2)); border-radius:999px;
+  }
+  section, .timeline{scrollbar-color:var(--intel-blue) #e9f1fb; scrollbar-width:thin}
+}
 
-    <!-- Card 5: 2006 -->
-    <div>
-      <h2>2006</h2>
-      <h3>Peak GHG Emissions</h3>
-      <!-- Image placeholder -->
-      <img src="img/Blog-Feature-Image-How-AI-is-transforming.webp" alt="2006 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        This year marks Intel's highest annual greenhouse gas emissions 
-        for operations. Over subsequent years, Intel invests heavily in 
-        chemical abatement, renewable energy, and energy-efficient 
-        manufacturing to reverse this trend.
-      </p>
-    </div>
+/* Small-screen tweaks */
+@media (max-width:600px){
+  header img{width:80px} h1{font-size:1.3rem}
+  section > h2, .timeline > h2{font-size:1.1rem}
+  section h3, .timeline h3{font-size:1rem}
+  .timeline > .card, section > div{padding:1rem;font-size:.95rem}
+}
 
-    <!-- Card 6: 2020 -->
-    <div>
-      <h2>2020</h2>
-      <h3>RISE Strategy</h3>
-      <!-- Image placeholder -->
-      <img src="img/ESG.jpg" alt="2020 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Intel launches its RISE (Responsible, Inclusive, Sustainable, 
-        Enabling) strategy and 2030 goals, aiming to drive industry-wide 
-        progress on climate action, water stewardship, and waste reduction.
-      </p>
-    </div>
+/* Reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important}
+  .timeline > .card:hover, section > div:hover{transform:none}
+}
 
-    <!-- Card 7: 2022 -->
-    <div>
-      <h2>2022</h2>
-      <h3>Net-Zero By 2040</h3>
-      <!-- Image placeholder -->
-      <img src="img/OIP.jpeg" alt="2022 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Intel announces its commitment to achieve net-zero greenhouse 
-        gas emissions (Scope 1 and 2) across its global operations 
-        by 2040, building on years of environmental initiatives.
-      </p>
-    </div>
-
-    <!-- Card 8: 2023 -->
-    <div>
-      <h2>2023</h2>
-      <h3>Renewable Electricity</h3>
-      <!-- Image placeholder -->
-      <img src="img/Blog-Feature-Image-How-AI-is-transforming.webp" alt="2023 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        The company achieves 99% renewable electricity usage worldwide, 
-        helping to drastically lower carbon emissions and driving progress 
-        toward Intel's long-term sustainability goals.
-      </p>
-    </div>
-
-    <!-- Card 9: 2024 -->
-    <div>
-      <h2>2024</h2>
-      <h3>Sustainability Summit</h3>
-      <!-- Image placeholder -->
-      <img src="img/DSC_4147A-1024x534.webp" alt="2024 placeholder image" style="width:100px;height:auto;" />
-      <p>
-        Intel hosts its first Sustainability Summit, uniting suppliers, 
-        government officials, and industry leaders to collaborate on 
-        next-generation sustainable semiconductor manufacturing.
-      </p>
-    </div>
-  </section>
-  <p>Scroll to view timeline | Hover over cards to learn more!</p>
-</body>
-</html>
-/* Add your CSS here */
+/* Footer (optional) */
+footer{background:var(--intel-blue);color:#fff;text-align:center;padding:1rem 0;margin-top:2rem}
